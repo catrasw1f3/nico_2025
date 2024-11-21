@@ -1,6 +1,6 @@
 ---
 layout: base
-title: Student Home 
+title: Nico Page Home 
 description: Home Page
 hide: true
 ---
