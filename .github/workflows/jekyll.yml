@@ -63,5 +63,5 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
         
-github_repo: "student_2025" 
-baseurl: "/student_2025"
+github_repo: "CSSE-Nico" 
+baseurl: "/CSSE-Nico"
