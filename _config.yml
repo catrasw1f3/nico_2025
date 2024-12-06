@@ -1,8 +1,8 @@
-title: Nighthawk Pages 
+title: Nico CSSE Website 
 description: "Class of 2025"
-owner_name: John Mortensen
-github_username: nighthawkcoders
-github_repo: "CSSE-Nico" 
+owner_name: Nicolas Orozco
+github_username: lowmonkey4586
+github_repo: "Nico_2025" 
 baseurl: "/Nico_2025"
 future: true
 remote_theme: jekyll/minima
