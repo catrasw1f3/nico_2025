@@ -1,6 +1,6 @@
 ---
-layout: base
-title: Nico Page Home 
+layout: page
+title: Nico's Home Page
 description: Home Page
 hide: true
 ---
@@ -9,6 +9,8 @@ hide: true
 
 
 ![Porche 718](/CSSE-Nico/images/2222.JPG) 
+
+<alt="Porche 718" style="width:1500px; height;auto;">
 
 <img src="images/2222.JPG" alt="Porsche 718">
 
@@ -20,6 +22,7 @@ hide: true
 
 ![Ferrari](/CSSE-Nico/images/DSC00636.JPG)
 
-![Rolls Royce](/CSSE-Nico/images/DSC00367.JPG) alt="Rolls Royce"
-style="width:1500px; height;auto;">
+![Rolls Royce](/CSSE-Nico/images/DSC00367.JPG) 
+
+<alt="Rolls Royce" style="width:1500px; height;auto;">
 
