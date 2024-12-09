@@ -5,14 +5,12 @@ description: Home Page
 hide: true
 ---
 
-"Reality is wrong, dreams are for real." -Tupac Shakur 
+#### <i>"Reality is wrong, dreams are for real." -Tupac Shakur<i>
 
 
 ![Porche 718](/CSSE-Nico/images/2222.JPG) 
 
-<alt="Porche 718" style="width:1500px; height;auto;">
-
-<img src="images/2222.JPG" alt="Porsche 718">
+<img src="/CSSE-Nico/images/DSC00713.JPG" alt="Rolls">
 
 ![Lexus LFA](/CSSE-Nico/images/DSC00099.JPG)
 
