@@ -21,6 +21,3 @@ hide: true
 ![Ferrari](/CSSE-Nico/images/DSC00636.JPG)
 
 ![Rolls Royce](/CSSE-Nico/images/DSC00367.JPG) 
-
-<alt="Rolls Royce" style="width:1500px; height;auto;">
-
