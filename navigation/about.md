@@ -10,10 +10,10 @@ I also really like cars, as I consider myself a car enthusiast. I like to make c
 
 ---
 
-####Some Photos I took myself.
+###A photo I took myself.
 
 ![Porche 718](/CSSE-Nico/images/2222.JPG)
 
-![Porche GT2 RS](/CSSE-Nico/images/DSC00713.JPG)
-
-![Lexus LFA](/CSSE-Nico/images/DSC00099.JPG)
+<a href="https://imdb.com/title/tt0374900" target="_blank" style="text=decoration: none;">
+<button style="padding: 10px 20px; font-size: 16px; cursor: pointer;">Napoelon Dynamite</button>
+</a>
