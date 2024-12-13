@@ -5,7 +5,7 @@ github_username: lowmonkey4586
 github_repo: "Nico_2025" 
 baseurl: "/Nico_2025"
 future: true
-remote_theme: jekyll/dinky
+remote_theme: jekyll/cayman
 minima:
   skin: darklight
   social_links:
@@ -13,8 +13,8 @@ minima:
     - { platform: x, user_url: "https://x.com/NighthawkCoding/" }
     - { platform: youtube, user_url: "https://www.youtube.com/@nighthawkcodingsociety2868" } 
 # remote_theme: pages-themes/midnight@v0.2.0
-# remote_theme: pages-themes/cayman@v0.2.0
-remote_theme: pages-themes/dinky@v0.2.0
+remote_theme: pages-themes/cayman@v0.2.0
+# remote_theme: pages-themes/dinky@v0.2.0
 # remote_theme: pages-themes/minimal@v0.2.0
 # remote_theme: pages-themes/time-machine@v0.2.0
 plugins:
