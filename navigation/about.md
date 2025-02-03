@@ -1,3 +1,9 @@
+---
+layout: blogs 
+title: About
+search_exclude: true
+permalink: /about/
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
