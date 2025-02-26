@@ -1,13 +1,13 @@
 /**
- * GameEnv manages the game environment.
+ * GameEnv is a static class that manages the game environment.
  * 
  * The focus of the file is the canvas management and the calculation of the game area dimensions. 
  * All calculations are based on the window size, header, and footer.
  * 
- * This code uses an instance-based class pattern, which allows each GameLevel to have its own GameEnv.
+ * This code uses a classic Java static class pattern, which is nice for managing centralized data.
  * 
- * The instance-based class pattern ensures that there can be multiple instances of the game environment,
- * providing a separate point of reference for each game level. This approach helps maintain
+ * The static class pattern ensures that there is only one instance of the game environment,
+ * providing a single point of reference for all game objects. This approach helps maintain
  * consistency and simplifies the management of shared resources like the canvas and its dimensions.
  * 
  * @class GameEnv
@@ -19,18 +19,21 @@
  * @property {number} bottom - The bottom offset of the game area.
  */
 class GameEnv {
+    static canvas;
+    static ctx;
+    static innerWidth;
+    static innerHeight;
+    static top;
+    static bottom;
+
+    /**
+     * Private constructor to prevent instantiation.
+     * 
+     * @constructor
+     * @throws {Error} Throws an error if an attempt is made to instantiate the class.
+     */
     constructor() {
-        this.canvas = null;
-        this.ctx = null;
-        this.innerWidth = 0;
-        this.innerHeight = 0;
-        this.top = 0;
-        this.bottom = 0;
-        /* Below properties are not part of is-A or has-A relationships,
-        *  they are references for easy accessibility in game objects */
-        this.path = ''; // Reference to the resource path
-        this.gameControl = null; // Reference to the GameControl instance
-        this.gameObjects = []; // Reference list of game objects instancces    
+        throw new Error('GameEnv is a static class and cannot be instantiated.');
     }
 
     /**
@@ -39,8 +42,10 @@ class GameEnv {
      * This method sets the canvas element, calculates the top and bottom offsets,
      * and determines the inner width and height of the game area. It then sizes the canvas
      * to fit within the calculated dimensions.
+     * 
+     * @static
      */
-    create() {
+    static create() {
         this.setCanvas();
         this.setTop();
         this.setBottom();
@@ -51,32 +56,40 @@ class GameEnv {
 
     /**
      * Sets the canvas element and its 2D rendering context.
+     * 
+     * @static
      */
-    setCanvas() {
+    static setCanvas() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
     }
 
     /**
      * Sets the top offset based on the height of the header element.
+     * 
+     * @static
      */
-    setTop() {
+    static setTop() {
         const header = document.querySelector('header');
         this.top = header ? header.offsetHeight : 0;
     }
 
     /**
      * Sets the bottom offset based on the height of the footer element.
+     * 
+     * @static
      */
-    setBottom() {
+    static setBottom() {
         const footer = document.querySelector('footer');
         this.bottom = footer ? footer.offsetHeight : 0;
     }
 
     /**
      * Sizes the canvas to fit within the calculated dimensions.
+     * 
+     * @static
      */
-    size() {
+    static size() {
         this.canvas.width = this.innerWidth;
         this.canvas.height = this.innerHeight;
         this.canvas.style.width = `${this.innerWidth}px`;
@@ -88,8 +101,10 @@ class GameEnv {
 
     /**
      * Resizes the game environment by re-creating it.
+     * 
+     * @static
      */
-    resize() {
+    static resize() {
         this.create();
     }
 
@@ -97,8 +112,10 @@ class GameEnv {
      * Clears the canvas.
      * 
      * This method clears the entire canvas, making it ready for the next frame.
+     * 
+     * @static
      */
-    clear() {
+    static clear() {
         this.ctx.clearRect(0, 0, this.innerWidth, this.innerHeight);
     }
 }
