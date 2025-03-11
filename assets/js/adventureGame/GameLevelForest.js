@@ -68,23 +68,9 @@ class GameLevelForest {
         *  It pauses the main game, creates a new GameControl instance with the StarWars level,
         */
         interact: function() {
-          // Set a primary game reference from the game environment
-          let primaryGame = gameEnv.gameControl;
-          // Define the game in game level
-          let levelArray = [GameLevelStarWars];
-          // Define a new GameControl instance with the StarWars level
-          let gameInGame = new GameControl(path,levelArray);
-          // Pause the primary game 
-          primaryGame.pause();
-          // Start the game in game
-          gameInGame.start();
-          // Setup "callback" function to allow transition from game in gaame to the underlying game
-          gameInGame.gameOver = function() {
-            // Call .resume on primary game
-            primaryGame.resume();
-          }
-        }
-      };
+          alert("You have reached the end. You managed to get yourself out of your head and into the real world. Welcome back. ( You have completed the game. Thank you for playing. )");
+  }
+};
 
     // List of classes and supporting definitions to create the game level
     this.classes = [
