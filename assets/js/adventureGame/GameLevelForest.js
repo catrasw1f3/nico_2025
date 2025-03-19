@@ -1,83 +1,136 @@
 import Background from './Background.js';
 import Npc from './Npc.js';
 import Player from './Player.js';
-import GameControl from './GameControl.js';
-import GameLevelStarWars from './GameLevelStarWars.js';
 
 class GameLevelForest {
-  /**
-   * Properties and methods to define a game level
-   * @param {*} gameEnv - The active game environment
-   */
   constructor(gameEnv) {
-    // Dependencies to support game level creation
     let width = gameEnv.innerWidth;
     let height = gameEnv.innerHeight;
     let path = gameEnv.path;
-
-    // Background data
+    
+    // Forest background data
     const image_src_forest = path + "/images/gamify/forest.png";
     const image_data_forest = {
-        id: 'Forest',
-        src: image_src_forest,
-        pixels: {height: 597, width: 340}
+      id: 'Forest',
+      src: image_src_forest,
+      pixels: { height: 597, width: 340 }
     };
 
-    // Player data for Main Character
-    const sprite_src_degen = path + "/images/gamify/degen.png"; // be sure to include the path
+    // Player sprite (Degen)
+    const sprite_src_degen = path + "/images/gamify/degen.png";
     const DEGEN_SCALE_FACTOR = 7;
+    let driftTime = 0;
+
+    function updateDrift() {
+      driftTime += 0.05;
+      return Math.sin(driftTime) * 0.5;
+    }
+
     const sprite_data_degen = {
-        id: 'Degen',
-        greeting: "Woah, this is the outside... this is different, very different",
-        src: sprite_src_degen,
-        SCALE_FACTOR: DEGEN_SCALE_FACTOR,  // Adjust this based on your scaling needs
-        STEP_FACTOR: 250,
-        ANIMATION_RATE: 20,
-        INIT_POSITION: { x: 0, y: height - (height/DEGEN_SCALE_FACTOR) }, 
-        pixels: {height: 600, width: 520},
-        orientation: {rows: 4, columns: 4 },
-        down: {row: 0, start: 0, columns: 4 },
-        downRight: {row: 1, start: 0, columns: 4, rotate: Math.PI/16 },
-        downLeft: {row: 2, start: 0, columns: 4, rotate: -Math.PI/16 },
-        left: {row: 2, start: 0, columns: 4 },
-        right: {row: 1, start: 0, columns: 4 },
-        up: {row: 3, start: 0, columns: 4 },
-        upLeft: {row: 2, start: 0, columns: 4, rotate: Math.PI/16 },
-        upRight: {row: 1, start: 0, columns: 4, rotate: -Math.PI/16 },
-        hitbox: { widthPercentage: 0.45, heightPercentage: 0.2 },
-        keypress: { up: 87, left: 65, down: 83, right: 68 } // W, A, S, D
+      id: 'Degen',
+      greeting: "Woah, this is the outside... this is different, very different",
+      src: sprite_src_degen,
+      SCALE_FACTOR: DEGEN_SCALE_FACTOR,
+      STEP_FACTOR: 250,
+      ANIMATION_RATE: 20,
+      INIT_POSITION: { x: 0, y: height - (height / DEGEN_SCALE_FACTOR) },
+      pixels: { height: 600, width: 520 },
+      orientation: { rows: 4, columns: 4 },
+      down: { row: 0, start: 0, columns: 4 },
+      right: { row: 1, start: 0, columns: 4 },
+      up: { row: 3, start: 0, columns: 4 },
+      left: { row: 2, start: 0, columns: 4 },
+      hitbox: { widthPercentage: 0.45, heightPercentage: 0.2 },
+      keypress: { up: 87, left: 65, down: 83, right: 68 },
+      updatePosition: function () {
+        this.INIT_POSITION.y += updateDrift();
+      },
+      checkCollisionWithNpc: function(npc) {
+        const playerRect = {
+          x: this.INIT_POSITION.x,
+          y: this.INIT_POSITION.y,
+          width: this.pixels.width * this.hitbox.widthPercentage,
+          height: this.pixels.height * this.hitbox.heightPercentage
+        };
+        
+        const npcRect = {
+          x: npc.INIT_POSITION.x,
+          y: npc.INIT_POSITION.y,
+          width: npc.pixels.width * npc.hitbox.widthPercentage,
+          height: npc.pixels.height * npc.hitbox.heightPercentage
+        };
+
+        return playerRect.x < npcRect.x + npcRect.width &&
+               playerRect.x + playerRect.width > npcRect.x &&
+               playerRect.y < npcRect.y + npcRect.height &&
+               playerRect.y + playerRect.height > npcRect.y;
+      }
     };
 
-    // NPC data for Unc
-    const sprite_src_unc = path + "/images/gamify/Unc.png"; // Ensure the correct path
+    // NPC sprite (Unc)
+    const sprite_src_unc = path + "/images/gamify/Unc.png";
     const sprite_greet_unc = "Welcome to the outside world, Degen. Thank you for playing the game and escaping the basement.";
     const sprite_data_unc = {
       id: 'Unc',
       greeting: sprite_greet_unc,
       src: sprite_src_unc,
-      SCALE_FACTOR: 6,  // Adjust scaling as needed
+      SCALE_FACTOR: 6,
       ANIMATION_RATE: 50,
-      pixels: { height: 192, width: 96 },  // Fixed sprite sheet dimensions
+      pixels: { height: 192, width: 96 },
       INIT_POSITION: { x: (width / 2), y: (height / 1.7) },
-      orientation: { rows: 4, columns: 3 }, // Defines the sprite sheet layout
-      down: { row: 0, start: 0, columns: 3 },  // Uses the first row for idle animation
-      frameSize: { width: 32, height: 48 }, // Each frame's actual size
+      orientation: { rows: 4, columns: 3 },
+      down: { row: 0, start: 0, columns: 3 },
+      frameSize: { width: 32, height: 48 },
       hitbox: { widthPercentage: 0.1, heightPercentage: 0.2 },
-        /* Interact function
-        *  This function is called when the player interacts with the NPC
-        *  It pauses the main game, creates a new GameControl instance with the StarWars level,
-        */
-        interact: function() {
-          alert("You have reached the end. You managed to get yourself out of your head and into the real world. Welcome back. ( You have completed the game. Thank you for playing. )");
-  }
-};
+      interact: function () {
+        alert("You have reached the end. You managed to get yourself out of your head and into the real world. Welcome back. ( You have completed the game. Thank you for playing. )");
+      }
+    };
 
-    // List of classes and supporting definitions to create the game level
+    // Add classes for background, player, and NPC
     this.classes = [
       { class: Background, data: image_data_forest },
       { class: Player, data: sprite_data_degen },
       { class: Npc, data: sprite_data_unc },
     ];
+
+    // Main game loop
+    function gameLoop() {
+      sprite_data_degen.updatePosition();
+      if (sprite_data_degen.checkCollisionWithNpc(sprite_data_unc)) {
+        showPopupMessage();
+      }
+      requestAnimationFrame(gameLoop);
+    }
+
+    gameLoop();
+
+    // Function to show the pop-up message
+    function showPopupMessage() {
+      const popup = document.getElementById("popup");
+      if (!popup) {
+        const newPopup = document.createElement("div");
+        newPopup.id = "popup";
+        newPopup.style.position = "fixed";
+        newPopup.style.top = "50%";
+        newPopup.style.left = "50%";
+        newPopup.style.transform = "translate(-50%, -50%)";
+        newPopup.style.backgroundColor = "rgba(0,0,0,0.7)";
+        newPopup.style.color = "white";
+        newPopup.style.padding = "20px";
+        newPopup.innerText = "Game Level Ended Thanks for Playing";
+        document.body.appendChild(newPopup);
+
+        setTimeout(() => {
+          newPopup.style.display = "none";
+        }, 3000);
+      } else {
+        popup.style.display = "block";
+        setTimeout(() => {
+          popup.style.display = "none";
+        }, 3000);
+      }
+    }
   }
 }
 
