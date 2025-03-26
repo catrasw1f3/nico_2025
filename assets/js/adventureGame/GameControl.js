@@ -64,7 +64,15 @@ class GameControl {
         this.currentLevel.update();
         this.handleInLevelLogic();
         requestAnimationFrame(this.gameLoop.bind(this));
+
+        // Game loop for the degen
+        sprite_data_degen.updatePosition();
+        if (sprite_data_degen.checkCollisionWithNpc(sprite_data_unc)) {
+        showPopupMessage();
+        }
+        requestAnimationFrame(gameLoop);
     }
+    
 
     /**
      * This method is a placeholder for future logic that needs to be executed during the game loop.

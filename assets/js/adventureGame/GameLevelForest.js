@@ -1,6 +1,7 @@
 import Background from './Background.js';
 import Npc from './Npc.js';
 import Player from './Player.js';
+import gameLoop from './GameControl.js';
 
 class GameLevelForest {
   constructor(gameEnv) {
@@ -93,15 +94,7 @@ class GameLevelForest {
       { class: Player, data: sprite_data_degen },
       { class: Npc, data: sprite_data_unc },
     ];
-
-    // Main game loop
-    function gameLoop() {
-      sprite_data_degen.updatePosition();
-      if (sprite_data_degen.checkCollisionWithNpc(sprite_data_unc)) {
-        showPopupMessage();
-      }
-      requestAnimationFrame(gameLoop);
-    }
+     
 
     gameLoop();
 

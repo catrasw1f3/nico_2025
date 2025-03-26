@@ -8,7 +8,6 @@ class GameLevel {
         this.gameEnv.path = gameControl.path;
         this.gameEnv.gameControl = gameControl;
     }
-
     // Create the game level and its objects
     create(GameLevelClass) {
         this.continue = true;
