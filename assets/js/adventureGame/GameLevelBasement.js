@@ -362,6 +362,7 @@ class Conversation {
       this.currentNode = nextNode;
     }
   }
+
 }
 
 export default GameLevelBasement;

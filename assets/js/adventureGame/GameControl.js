@@ -192,6 +192,70 @@ class GameControl {
         this.showCanvasState();
         this.gameLoop();
     }
+
+
+  constructor(gameEnv) {
+    this.gameEnv = gameEnv;
+    this.currentLevel = null;
+    this.createTransitionElement();
+    this.changeLevel("basement"); // Start the game in the basement
+  }
+
+  createTransitionElement() {
+    const transitionDiv = document.createElement("div");
+    transitionDiv.id = "level-transition";
+    transitionDiv.style.position = "fixed";
+    transitionDiv.style.top = "0";
+    transitionDiv.style.left = "0";
+    transitionDiv.style.width = "100%";
+    transitionDiv.style.height = "100%";
+    transitionDiv.style.backgroundColor = "black";
+    transitionDiv.style.opacity = "0";
+    transitionDiv.style.transition = "opacity 1s ease-in-out";
+    transitionDiv.style.pointerEvents = "none";
+    document.body.appendChild(transitionDiv);
+    this.transitionDiv = transitionDiv;
+  }
+
+  fadeOut(callback) {
+    this.transitionDiv.style.opacity = "1";
+    setTimeout(() => {
+      callback();
+    }, 1000); // Wait for 1s before changing level
+  }
+
+  fadeIn() {
+    this.transitionDiv.style.opacity = "0";
+  }
+
+  changeLevel(levelName) {
+    this.fadeOut(() => {
+      if (this.currentLevel) {
+        this.cleanupLevel();
+      }
+
+      switch (levelName) {
+        case "basement":
+          this.currentLevel = new GameLevelBasement(this.gameEnv, this);
+          break;
+        case "forest":
+          this.currentLevel = new GameLevelForest(this.gameEnv, this);
+          break;
+        default:
+          console.error("Invalid level:", levelName);
+          return;
+      }
+
+      setTimeout(() => {
+        this.fadeIn();
+      }, 500); // Fade in after switching
+    });
+  }
+
+  cleanupLevel() {
+    this.currentLevel = null;
+  }
+
 }
 
 export default GameControl;
