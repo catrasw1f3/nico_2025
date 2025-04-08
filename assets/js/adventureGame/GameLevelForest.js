@@ -95,36 +95,7 @@ class GameLevelForest {
       { class: Npc, data: sprite_data_unc },
     ];
      
-
-    gameLoop();
-
-    // Function to show the pop-up message
-    function showPopupMessage() {
-      const popup = document.getElementById("popup");
-      if (!popup) {
-        const newPopup = document.createElement("div");
-        newPopup.id = "popup";
-        newPopup.style.position = "fixed";
-        newPopup.style.top = "50%";
-        newPopup.style.left = "50%";
-        newPopup.style.transform = "translate(-50%, -50%)";
-        newPopup.style.backgroundColor = "rgba(0,0,0,0.7)";
-        newPopup.style.color = "white";
-        newPopup.style.padding = "20px";
-        newPopup.innerText = "Game Level Ended Thanks for Playing";
-        document.body.appendChild(newPopup);
-
-        setTimeout(() => {
-          newPopup.style.display = "none";
-        }, 3000);
-      } else {
-        popup.style.display = "block";
-        setTimeout(() => {
-          popup.style.display = "none";
-        }, 3000);
-      }
-    }
   }
-}
+}  
 
 export default GameLevelForest;

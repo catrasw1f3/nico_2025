@@ -2,6 +2,9 @@
 import GameLevel from "./GameLevel.js";
 import GameLevelForest from "./GameLevelForest.js";
 import GameLevelDesert from "./GameLevelBasement.js";
+import GameLevelStarWars from "./GameLevelStarWars.js";
+import GameLevelSquares from "./GameLevelSquares.js";
+import GameLevelWater from "./GameLevelWater.js";
 
 class GameControl {
     /**
@@ -9,7 +12,7 @@ class GameControl {
      * @param {*} path - The path to the game assets
      * @param {*} levelClasses - The classes of for each game level
      */
-    constructor(path, levelClasses = [GameLevelDesert, GameLevelForest]) {
+    constructor(path, levelClasses = [GameLevelDesert, GameLevelForest, GameLevelStarWars, GameLevelSquares]) {
         // GameControl properties
         this.path = path;
         this.levelClasses = levelClasses;
@@ -192,14 +195,6 @@ class GameControl {
         this.showCanvasState();
         this.gameLoop();
     }
-
-
-  constructor(gameEnv) {
-    this.gameEnv = gameEnv;
-    this.currentLevel = null;
-    this.createTransitionElement();
-    this.changeLevel("basement"); // Start the game in the basement
-  }
 
   createTransitionElement() {
     const transitionDiv = document.createElement("div");
