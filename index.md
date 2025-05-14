@@ -31,6 +31,13 @@ style="text-deocration: none">
 </button>
 <a>
 
+<a href="https://nico055o.github.io/Nico_2025/catch-game/CatchGame" target="_blank"
+style="text-deocration: none">
+    <button style="padding: 10px 20px; front-size: 16px; cursor: pointer;">Catch Game Exploration 
+</button>
+<a>
+
+
 
 ![Image](https://github.com/user-attachments/assets/bfe2e016-bb73-41e3-9c5a-89b9139069be)
 
