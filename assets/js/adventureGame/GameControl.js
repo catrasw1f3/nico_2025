@@ -2,9 +2,7 @@
 import GameLevel from "./GameLevel.js";
 import GameLevelForest from "./GameLevelForest.js";
 import GameLevelDesert from "./GameLevelBasement.js";
-import GameLevelStarWars from "./GameLevelStarWars.js";
-import GameLevelSquares from "./GameLevelSquares.js";
-import GameLevelWater from "./GameLevelWater.js";
+import GameLevelBasement from "./GameLevelBasement.js";
 
 class GameControl {
     /**
@@ -12,7 +10,7 @@ class GameControl {
      * @param {*} path - The path to the game assets
      * @param {*} levelClasses - The classes of for each game level
      */
-    constructor(path, levelClasses = [GameLevelDesert, GameLevelForest, GameLevelStarWars, GameLevelSquares]) {
+    constructor(path, levelClasses = [GameLevelBasement, GameLevelForest]) {
         // GameControl properties
         this.path = path;
         this.levelClasses = levelClasses;

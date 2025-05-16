@@ -4,7 +4,7 @@ import Player from './Player.js';
 import Npc from './Npc.js';
 import Quiz from './Quiz.js';
 import GameControl from './GameControl.js';
-import GameLevelStarWars from './GameLevelStarWars.js';
+import GameLevelForest from './GameLevelForest.js';
 
 class GameLevelBasement {
   constructor(gameEnv) {
