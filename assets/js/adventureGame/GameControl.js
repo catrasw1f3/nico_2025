@@ -1,8 +1,5 @@
-// GameControl.js
+// GameControl.js with improved level transition handling
 import GameLevel from "./GameLevel.js";
-import GameLevelForest from "./GameLevelForest.js";
-import GameLevelDesert from "./GameLevelBasement.js";
-import GameLevelBasement from "./GameLevelBasement.js";
 
 class GameControl {
     /**
@@ -10,9 +7,12 @@ class GameControl {
      * @param {*} path - The path to the game assets
      * @param {*} levelClasses - The classes of for each game level
      */
-    constructor(path, levelClasses = [GameLevelBasement, GameLevelForest]) {
+    constructor(game, levelClasses) {
         // GameControl properties
-        this.path = path;
+        this.game = game; // Reference required for game-in-game logic
+        this.path = game.path;
+        this.gameContainer = game.gameContainer; // Document element that contains the game
+        this.gameCanvas = game.gameCanvas; // Document element that contains the game canvas
         this.levelClasses = levelClasses;
         this.currentLevel = null;
         this.currentLevelIndex = 0;
@@ -21,6 +21,9 @@ class GameControl {
         this.exitKeyListener = this.handleExitKey.bind(this);
         this.gameOver = null; // Callback for when the game is over 
         this.savedCanvasState = []; // Save the current levels game elements 
+        
+        // Capture all global interactions for cleaning up during transitions
+        this.globalInteractionHandlers = new Set();
     }
 
     /**
@@ -34,12 +37,47 @@ class GameControl {
     }
 
     /**
+     * Register a global interaction handler that will be cleaned up during transitions
+     * @param {Object} handler - Object with handleKeyDownBound and handleKeyUpBound methods
+     */
+    registerInteractionHandler(handler) {
+        if (handler) {
+            this.globalInteractionHandlers.add(handler);
+        }
+    }
+
+    /**
+     * Unregister a global interaction handler
+     * @param {Object} handler - Handler to remove
+     */
+    unregisterInteractionHandler(handler) {
+        if (handler) {
+            this.globalInteractionHandlers.delete(handler);
+        }
+    }
+
+    /**
+     * Clean up all registered global interaction handlers
+     */
+    cleanupInteractionHandlers() {
+        this.globalInteractionHandlers.forEach(handler => {
+            if (handler.removeInteractKeyListeners) {
+                handler.removeInteractKeyListeners();
+            }
+        });
+        this.globalInteractionHandlers.clear();
+    }
+
+    /**
      * Transitions to the next level in the level by
      * 1. Creating a new GameLevel instance
      * 2. Creating the level using the GameLevelClass
      * 3. Starting the game loop
      */ 
     transitionToLevel() {
+        // Clean up any lingering interaction handlers
+        this.cleanupInteractionHandlers();
+
         const GameLevelClass = this.levelClasses[this.currentLevelIndex];
         this.currentLevel = new GameLevel(this);
         this.currentLevel.create(GameLevelClass);
@@ -48,9 +86,6 @@ class GameControl {
 
     /**
      * The main game loop 
-     * 1. Updates the current level
-     * 2. Handles the level start
-     * 3. Requests the next frame
      */
     gameLoop() {
         // If the level is not set to continue, handle the level end condition 
@@ -62,18 +97,12 @@ class GameControl {
         if (this.isPaused) {
             return;
         }
+        // Level updates
         this.currentLevel.update();
         this.handleInLevelLogic();
+        // Recurse at frame rate speed
         requestAnimationFrame(this.gameLoop.bind(this));
-
-        // Game loop for the degen
-        sprite_data_degen.updatePosition();
-        if (sprite_data_degen.checkCollisionWithNpc(sprite_data_unc)) {
-        showPopupMessage();
-        }
-        requestAnimationFrame(gameLoop);
     }
-    
 
     /**
      * This method is a placeholder for future logic that needs to be executed during the game loop.
@@ -101,7 +130,12 @@ class GameControl {
         } else {
             alert("All levels completed.");
         }
+        
+        // Clean up any lingering interaction handlers
+        this.cleanupInteractionHandlers();
+        
         this.currentLevel.destroy();
+        
         // Call the gameOver callback if it exists
         if (this.gameOver) {
             this.gameOver();
@@ -178,6 +212,9 @@ class GameControl {
         this.removeExitKeyListener();
         this.saveCanvasState();
         this.hideCanvasState();
+        
+        // Also clean up interaction handlers
+        this.cleanupInteractionHandlers();
      }
 
      /**
@@ -193,62 +230,6 @@ class GameControl {
         this.showCanvasState();
         this.gameLoop();
     }
-
-  createTransitionElement() {
-    const transitionDiv = document.createElement("div");
-    transitionDiv.id = "level-transition";
-    transitionDiv.style.position = "fixed";
-    transitionDiv.style.top = "0";
-    transitionDiv.style.left = "0";
-    transitionDiv.style.width = "100%";
-    transitionDiv.style.height = "100%";
-    transitionDiv.style.backgroundColor = "black";
-    transitionDiv.style.opacity = "0";
-    transitionDiv.style.transition = "opacity 1s ease-in-out";
-    transitionDiv.style.pointerEvents = "none";
-    document.body.appendChild(transitionDiv);
-    this.transitionDiv = transitionDiv;
-  }
-
-  fadeOut(callback) {
-    this.transitionDiv.style.opacity = "1";
-    setTimeout(() => {
-      callback();
-    }, 1000); // Wait for 1s before changing level
-  }
-
-  fadeIn() {
-    this.transitionDiv.style.opacity = "0";
-  }
-
-  changeLevel(levelName) {
-    this.fadeOut(() => {
-      if (this.currentLevel) {
-        this.cleanupLevel();
-      }
-
-      switch (levelName) {
-        case "basement":
-          this.currentLevel = new GameLevelBasement(this.gameEnv, this);
-          break;
-        case "forest":
-          this.currentLevel = new GameLevelForest(this.gameEnv, this);
-          break;
-        default:
-          console.error("Invalid level:", levelName);
-          return;
-      }
-
-      setTimeout(() => {
-        this.fadeIn();
-      }, 500); // Fade in after switching
-    });
-  }
-
-  cleanupLevel() {
-    this.currentLevel = null;
-  }
-
 }
 
 export default GameControl;
