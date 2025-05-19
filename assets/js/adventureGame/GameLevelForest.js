@@ -2,13 +2,14 @@ import Background from './Background.js';
 import Npc from './Npc.js';
 import Player from './Player.js';
 import gameLoop from './GameControl.js';
+import enemy from './Enemy.js';
 
 class GameLevelForest {
   constructor(gameEnv) {
     let width = gameEnv.innerWidth;
     let height = gameEnv.innerHeight;
     let path = gameEnv.path;
-    
+
     // Forest background data
     const image_src_forest = path + "/images/gamify/forest.png";
     const image_data_forest = {
@@ -18,15 +19,6 @@ class GameLevelForest {
     };
 
     // Player sprite (Degen)
-    const sprite_src_degen = path + "/images/gamify/degen.png";
-    const DEGEN_SCALE_FACTOR = 7;
-    let driftTime = 0;
-
-    function updateDrift() {
-      driftTime += 0.05;
-      return Math.sin(driftTime) * 0.5;
-    }
-
     const sprite_data_degen = {
       id: 'Degen',
       greeting: "Woah, this is the outside... this is different, very different",
@@ -53,7 +45,7 @@ class GameLevelForest {
           width: this.pixels.width * this.hitbox.widthPercentage,
           height: this.pixels.height * this.hitbox.heightPercentage
         };
-        
+
         const npcRect = {
           x: npc.INIT_POSITION.x,
           y: npc.INIT_POSITION.y,
@@ -65,6 +57,15 @@ class GameLevelForest {
                playerRect.x + playerRect.width > npcRect.x &&
                playerRect.y < npcRect.y + npcRect.height &&
                playerRect.y + playerRect.height > npcRect.y;
+      },
+      // Function to redirect to platformer.html
+      handleNpcInteraction: function(npc) {
+        if (npc.id === 'Unc' && this.checkCollisionWithNpc(npc)) {
+          npc.interact();
+          setTimeout(() => {
+            window.location.href = 'platformer.html';
+          }, 3000); // Delay redirect to let dialog finish
+        }
       }
     };
 
@@ -94,8 +95,12 @@ class GameLevelForest {
       { class: Player, data: sprite_data_degen },
       { class: Npc, data: sprite_data_unc },
     ];
-     
+
+    // Optional: Attach interaction check to game loop if needed
+    setInterval(() => {
+      sprite_data_degen.handleNpcInteraction(sprite_data_unc);
+    }, 100);
   }
-}  
+}
 
 export default GameLevelForest;
