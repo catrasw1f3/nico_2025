@@ -13,7 +13,7 @@ style="text-deocration: none">
 </button>
 <a>
 
-<a href="http://127.0.0.1:4000/Nico_2025/gamify/adventureGame" target="_blank"
+<a href="https://nico055o.github.io/Nico_2025/Nico_2025/gamify/adventureGame" target="_blank"
 style="text-deocration: none">
     <button style="padding: 10px 20px; front-size: 16px; cursor: pointer;">RPG Game 
 </button>
