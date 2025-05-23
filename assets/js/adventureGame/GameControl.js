@@ -1,125 +1,106 @@
-// GameControl.js with improved level transition handling
+// GameControl.js
 import GameLevel from "./GameLevel.js";
+import GameLevelWater from "./GameLevelWater.js";
+import GameLevelBasement from "./GameLevelBasement.js";
+import GameLevelMC from "./GameLevelMC.js";
+import GameLevelForest from "./GameLevelForest.js";
+
 
 class GameControl {
     /**
      * GameControl class to manage the game levels and transitions
-     * @param {*} game - The game instance containing path, container, and canvas
-     * @param {*} levelClasses - An array of classes for each game level
+     * @param {*} path - The path to the game assets
+     * @param {*} levelClasses - The classes of for each game level
      */
-    constructor(game, levelClasses) {
-        // Ensure levelClasses is a valid array
-        if (!Array.isArray(levelClasses) || levelClasses.length === 0) {
-            throw new Error("GameControl initialization failed: levelClasses must be a non-empty array.");
-        }
-
-        this.game = game;
-        this.path = game.path;
-        this.gameContainer = game.gameContainer;
-        this.gameCanvas = game.gameCanvas;
+    constructor(path, levelClasses = [GameLevelBasement, GameLevelForest, GameLevelWater]) {
+        // GameControl properties
+        this.path = path;
         this.levelClasses = levelClasses;
-
         this.currentLevel = null;
         this.currentLevelIndex = 0;
         this.gameLoopCounter = 0;
         this.isPaused = false;
         this.exitKeyListener = this.handleExitKey.bind(this);
-        this.gameOver = null;
-        this.savedCanvasState = [];
-
-        this.globalInteractionHandlers = new Set();
+        this.gameOver = null; // Callback for when the game is over 
+        this.savedCanvasState = []; // Save the current levels game elements 
     }
 
+    /**
+     * Starts the game by 
+     * 1. Adding an exit key listener
+     * 2. Transitioning to the first level
+     */
     start() {
         this.addExitKeyListener();
         this.transitionToLevel();
     }
 
-    registerInteractionHandler(handler) {
-        if (handler) {
-            this.globalInteractionHandlers.add(handler);
-        }
-    }
-
-    unregisterInteractionHandler(handler) {
-        if (handler) {
-            this.globalInteractionHandlers.delete(handler);
-        }
-    }
-
-    cleanupInteractionHandlers() {
-        this.globalInteractionHandlers.forEach(handler => {
-            if (handler.removeInteractKeyListeners) {
-                handler.removeInteractKeyListeners();
-            }
-        });
-        this.globalInteractionHandlers.clear();
-    }
-
+    /**
+     * Transition to the next level with a fade-out and fade-in effect
+     */
     transitionToLevel() {
-        this.cleanupInteractionHandlers();
-
-        // Safety checks
-        if (!this.levelClasses || this.levelClasses.length === 0) {
-            console.error("No levels defined.");
-            alert("Game cannot start: no levels defined.");
-            return;
-        }
-
-        if (this.currentLevelIndex >= this.levelClasses.length) {
-            console.warn("No more levels to load.");
-            alert("All levels completed.");
-            return;
-        }
-
         const GameLevelClass = this.levelClasses[this.currentLevelIndex];
-        if (!GameLevelClass) {
-            console.error(`Level class at index ${this.currentLevelIndex} is undefined.`);
-            return;
-        }
-
         this.currentLevel = new GameLevel(this);
         this.currentLevel.create(GameLevelClass);
         this.gameLoop();
     }
 
+    /**
+     * The main game loop 
+     * 1. Updates the current level
+     * 2. Handles the level start
+     * 3. Requests the next frame
+     */
     gameLoop() {
-        if (!this.currentLevel || !this.currentLevel.continue) {
+        // If the level is not set to continue, handle the level end condition 
+        if (!this.currentLevel.continue) {
             this.handleLevelEnd();
             return;
         }
-
+        // If the game level is paused, stop the game loop
         if (this.isPaused) {
             return;
         }
-
         this.currentLevel.update();
         this.handleInLevelLogic();
-
+         
+        // Check if the level is set to restart
+        // If the level is set to restart, call the restartLevel method
+        if (this.currentLevel.restart) {
+            this.restartLevel();
+            return;
+        }
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 
+    /**
+     * This method is a placeholder for future logic that needs to be executed during the game loop.
+     * For example, a starting page or time-based events
+     */
     handleInLevelLogic() {
+        // This condition is established for future starting page logic
         if (this.currentLevelIndex === 0 && this.gameLoopCounter === 0) {
             console.log("Start Level.");
         }
-
+        // This counter is established for future time-based logic, like frames per second
         this.gameLoopCounter++;
     }
 
+    /**
+     * Handles the level end by
+     * 1. Destroying the current level
+     * 2. Calling the gameOver callback if it exists
+     * 3. Transitioning to the next level
+     */
     handleLevelEnd() {
+        // Alert the user that the level has ended
         if (this.currentLevelIndex < this.levelClasses.length - 1) {
             alert("Level ended.");
         } else {
             alert("All levels completed.");
         }
-
-        this.cleanupInteractionHandlers();
-
-        if (this.currentLevel) {
-            this.currentLevel.destroy();
-        }
-
+        this.currentLevel.destroy();
+        // Call the gameOver callback if it exists
         if (this.gameOver) {
             this.gameOver();
         } else {
@@ -128,22 +109,27 @@ class GameControl {
         }
     }
 
+    /**
+     * Exit key handler to end the current level
+     * @param {*} event - The keydown event object
+     */
     handleExitKey(event) {
         if (event.key === 'Escape') {
-            if (this.currentLevel) {
-                this.currentLevel.continue = false;
-            }
+            this.currentLevel.continue = false;
         }
     }
 
+    // Helper method to add exit key listener
     addExitKeyListener() {
         document.addEventListener('keydown', this.exitKeyListener);
     }
 
+    // Helper method to remove exit key listener
     removeExitKeyListener() {
         document.removeEventListener('keydown', this.exitKeyListener);
     }
 
+    // Helper method to save the current canvas id and image data in the game container
     saveCanvasState() {
         const gameContainer = document.getElementById('gameContainer');
         const canvasElements = gameContainer.querySelectorAll('canvas');
@@ -155,9 +141,10 @@ class GameControl {
         });
     }
 
+    // Helper method to hide the current canvas state in the game container
     hideCanvasState() {
         const gameContainer = document.getElementById('gameContainer');
-        const canvasElements = gameContainer.querySelectorAll('canvas');
+        const canvasElements = gameContainer.querySelectorAll('canvas');4
         canvasElements.forEach(canvas => {
             if (canvas.id !== 'gameCanvas') {
                 canvas.style.display = 'none';
@@ -165,7 +152,9 @@ class GameControl {
         });
     }
 
+    // Helper method to restore the hidden canvas item to be visible
     showCanvasState() {
+        const gameContainer = document.getElementById('gameContainer');
         this.savedCanvasState.forEach(hidden_canvas => {
             const canvas = document.getElementById(hidden_canvas.id);
             if (canvas) {
@@ -175,20 +164,50 @@ class GameControl {
         });
     }
 
+    /**
+     * Game level in Game Level helper method to pause the underlying game level
+     * 1. Set the current game level to paused
+     * 2. Remove the exit key listener
+     * 3. Save the current canvas game containers state
+     * 4. Hide the current canvas game containers
+     */
     pause() {
         this.isPaused = true;
         this.removeExitKeyListener();
         this.saveCanvasState();
         this.hideCanvasState();
-        this.cleanupInteractionHandlers();
-    }
+     }
 
+     /**
+      * Game level in Game Level helper method to resume the underlying game level
+      * 1. Set the current game level to not be paused
+      * 2. Add the exit key listener
+      * 3. Show the current canvas game containers
+      * 4. Start the game loop
+      */
     resume() {
         this.isPaused = false;
         this.addExitKeyListener();
         this.showCanvasState();
         this.gameLoop();
     }
+
+    /**
+     * Move to the next level
+     */
+    nextLevel() {
+        this.currentLevelIndex = (this.currentLevelIndex + 1) % this.levelClasses.length;
+        this.transitionToLevel();
+    }
+
+    restartLevel() {
+        if (this.currentLevel) { //checks if theres a current level, if so, then..
+            this.currentLevel.destroy(); //destroys the current level 
+        }
+        this.gameLoopCounter = 0; //resets the game loops counter 
+        this.transitionToLevel(); //transitions to the same level its currently in 
+    }
 }
+
 
 export default GameControl;
