@@ -1,0 +1,82 @@
+---
+layout: base
+title: Platformer
+permalink: /Nico_2025/gamify/collision_test
+---
+<!DOCTYPE html>
+<canvas id="game" width="800" height="600" style="border:1px solid #000"></canvas>
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+const platformerLink = "https://pages.opencodingsociety.com/navigation/game.html";
+
+// Simulated image size
+const NEZUKO_WIDTH = 189;
+const NEZUKO_HEIGHT = 316;
+
+// Nezuko sprite object
+const nezuko = {
+  x: 500,
+  y: 300,
+  width: NEZUKO_WIDTH,
+  height: NEZUKO_HEIGHT,
+  hitbox: { width: NEZUKO_WIDTH, height: NEZUKO_HEIGHT },
+  onCollision(player) {
+    console.log("Nezuko collision triggered");
+    window.location.href = platformerLink;
+  },
+  draw() {
+    ctx.fillStyle = "pink";
+    ctx.fillRect(this.x, this.y, this.width, this.height); // simulate Nezuko image
+  }
+};
+
+// Player object
+const player = {
+  x: 50,
+  y: 50,
+  width: 50,
+  height: 50,
+  speed: 5,
+  draw() {
+    ctx.fillStyle = "blue";
+    ctx.fillRect(this.x, this.y, this.width, this.height);
+  }
+};
+
+// Handle arrow key movement
+const keys = {};
+window.addEventListener("keydown", e => keys[e.key] = true);
+window.addEventListener("keyup", e => keys[e.key] = false);
+
+function updatePlayer() {
+  if (keys["ArrowUp"]) player.y -= player.speed;
+  if (keys["ArrowDown"]) player.y += player.speed;
+  if (keys["ArrowLeft"]) player.x -= player.speed;
+  if (keys["ArrowRight"]) player.x += player.speed;
+}
+
+function checkCollision(a, b) {
+  return a.x < b.x + b.width &&
+         a.x + a.width > b.x &&
+         a.y < b.y + b.height &&
+         a.y + a.height > b.y;
+}
+
+function gameLoop() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  updatePlayer();
+  player.draw();
+  nezuko.draw();
+
+  if (checkCollision(player, nezuko)) {
+    nezuko.onCollision(player);
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+</script>

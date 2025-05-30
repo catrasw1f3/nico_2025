@@ -4,7 +4,6 @@ import Player from './Player.js';
 import Npc from './Npc.js';
 import Quiz from './Quiz.js';
 import GameControl from './GameControl.js';
-import GameLevelFinale from './GameLevelFinale.js';
 import Creeper from './Creeper.js'; // Import the Creeper class
 
 class GameLevelMC {
@@ -70,7 +69,7 @@ class GameLevelMC {
       speed: 10,
       direction: { x: 1, y: 1 },
 
-      sound: new Audio(path + "/sounds/creeper.mp3"),
+      sound: new Audio(path + "/audio/creeper.mp3"),
 
       updatePosition: function () {
         this.INIT_POSITION.x += this.direction.x * this.speed;
