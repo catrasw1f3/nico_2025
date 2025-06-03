@@ -93,12 +93,7 @@ class GameControl {
         } else {
             alert("All levels completed.");
         }
-        
-        // Clean up any lingering interaction handlers
-        this.cleanupInteractionHandlers();
-        
         this.currentLevel.destroy();
-        
         // Call the gameOver callback if it exists
         if (this.gameOver) {
             this.gameOver();
