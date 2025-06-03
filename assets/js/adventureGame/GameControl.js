@@ -4,8 +4,6 @@ import GameLevelWater from "./GameLevelWater.js";
 import GameLevelBasement from "./GameLevelBasement.js";
 import GameLevelMC from "./GameLevelMC.js";
 import GameLevelForest from "./GameLevelForest.js";
-
-
 class GameControl {
     /**
      * GameControl class to manage the game levels and transitions
