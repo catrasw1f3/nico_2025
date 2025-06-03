@@ -3,8 +3,6 @@ import Npc from './Npc.js';
 import Player from './Player.js';
 import enemy from './Enemy.js';
 import GameControl from './GameControl.js';
-import GameLevelMC from './GameLevelMC.js';
-import GameLevelWater from './GameLevelWater.js';
 
 class GameLevelForest {
   constructor(gameEnv, gameControlInstance) {

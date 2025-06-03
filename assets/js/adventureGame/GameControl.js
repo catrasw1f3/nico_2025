@@ -1,18 +1,18 @@
-// GameControl.js
+// GameControl.js with improved level transition handling
 import GameLevel from "./GameLevel.js";
-import GameLevelWater from "./GameLevelWater.js";
-import GameLevelBasement from "./GameLevelBasement.js";
-import GameLevelMC from "./GameLevelMC.js";
-import GameLevelForest from "./GameLevelForest.js";
+
 class GameControl {
     /**
      * GameControl class to manage the game levels and transitions
      * @param {*} path - The path to the game assets
      * @param {*} levelClasses - The classes of for each game level
      */
-    constructor(path, levelClasses = [GameLevelBasement, GameLevelMC]) {
+    constructor(game, levelClasses) {
         // GameControl properties
-        this.path = path;
+        this.game = game; // Reference required for game-in-game logic
+        this.path = game.path;
+        this.gameContainer = game.gameContainer; // Document element that contains the game
+        this.gameCanvas = game.gameCanvas; // Document element that contains the game canvas
         this.levelClasses = levelClasses;
         this.currentLevel = null;
         this.currentLevelIndex = 0;
@@ -23,6 +23,7 @@ class GameControl {
         this.savedCanvasState = []; // Save the current levels game elements 
     }
 
+    
     /**
      * Starts the game by 
      * 1. Adding an exit key listener
@@ -34,8 +35,11 @@ class GameControl {
     }
 
     /**
-     * Transition to the next level with a fade-out and fade-in effect
-     */
+     * Transitions to the next level in the level by
+     * 1. Creating a new GameLevel instance
+     * 2. Creating the level using the GameLevelClass
+     * 3. Starting the game loop
+     */ 
     transitionToLevel() {
         const GameLevelClass = this.levelClasses[this.currentLevelIndex];
         this.currentLevel = new GameLevel(this);
@@ -45,9 +49,6 @@ class GameControl {
 
     /**
      * The main game loop 
-     * 1. Updates the current level
-     * 2. Handles the level start
-     * 3. Requests the next frame
      */
     gameLoop() {
         // If the level is not set to continue, handle the level end condition 
@@ -59,15 +60,10 @@ class GameControl {
         if (this.isPaused) {
             return;
         }
+        // Level updates
         this.currentLevel.update();
         this.handleInLevelLogic();
-         
-        // Check if the level is set to restart
-        // If the level is set to restart, call the restartLevel method
-        if (this.currentLevel.restart) {
-            this.restartLevel();
-            return;
-        }
+        // Recurse at frame rate speed
         requestAnimationFrame(this.gameLoop.bind(this));
     }
 
@@ -97,7 +93,12 @@ class GameControl {
         } else {
             alert("All levels completed.");
         }
+        
+        // Clean up any lingering interaction handlers
+        this.cleanupInteractionHandlers();
+        
         this.currentLevel.destroy();
+        
         // Call the gameOver callback if it exists
         if (this.gameOver) {
             this.gameOver();
@@ -116,7 +117,7 @@ class GameControl {
             this.currentLevel.continue = false;
         }
     }
-
+    
     // Helper method to add exit key listener
     addExitKeyListener() {
         document.addEventListener('keydown', this.exitKeyListener);
@@ -142,7 +143,7 @@ class GameControl {
     // Helper method to hide the current canvas state in the game container
     hideCanvasState() {
         const gameContainer = document.getElementById('gameContainer');
-        const canvasElements = gameContainer.querySelectorAll('canvas');4
+        const canvasElements = gameContainer.querySelectorAll('canvas');
         canvasElements.forEach(canvas => {
             if (canvas.id !== 'gameCanvas') {
                 canvas.style.display = 'none';
@@ -189,23 +190,6 @@ class GameControl {
         this.showCanvasState();
         this.gameLoop();
     }
-
-    /**
-     * Move to the next level
-     */
-    nextLevel() {
-        this.currentLevelIndex = (this.currentLevelIndex + 1) % this.levelClasses.length;
-        this.transitionToLevel();
-    }
-
-    restartLevel() {
-        if (this.currentLevel) { //checks if theres a current level, if so, then..
-            this.currentLevel.destroy(); //destroys the current level 
-        }
-        this.gameLoopCounter = 0; //resets the game loops counter 
-        this.transitionToLevel(); //transitions to the same level its currently in 
-    }
 }
-
 
 export default GameControl;

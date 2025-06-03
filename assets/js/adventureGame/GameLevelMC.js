@@ -5,6 +5,7 @@ import Npc from './Npc.js';
 import Quiz from './Quiz.js';
 import GameControl from './GameControl.js';
 import Creeper from './Creeper.js'; // Import the Creeper class
+import GameLevelForest from './GameLevelForest.js';
 
 class GameLevelMC {
   constructor(gameEnv) {

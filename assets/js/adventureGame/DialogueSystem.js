@@ -49,10 +49,10 @@ class DialogueSystem {
       fontFamily: "'Press Start 2P', cursive, monospace",
       fontSize: "14px",
       textAlign: "center",
-      border: "2px solid #4a86e8",
+      border: "2px solidrgb(79, 74, 232)",
       borderRadius: "12px",
       zIndex: "9999",
-      boxShadow: "0 0 20px rgba(0, 255, 255, 0.7)",
+      boxShadow: "0 0 20px rgba(0, 0, 255, 0.7)",
       display: "none"
     });
 
