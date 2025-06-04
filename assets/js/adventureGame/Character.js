@@ -69,14 +69,14 @@ class Character extends GameObject {
         
         // Initialize the object's scale based on the game environment
         this.scale = { width: this.gameEnv.innerWidth, height: this.gameEnv.innerHeight };
-        
-        // Check if sprite data is provided
-        if (data && data.src) {
-            this.scaleFactor = data.SCALE_FACTOR || SCALE_FACTOR;
+        this.scaleFactor = data.SCALE_FACTOR || SCALE_FACTOR;
             this.stepFactor = data.STEP_FACTOR || STEP_FACTOR;
             this.animationRate = data.ANIMATION_RATE || ANIMATION_RATE;
             this.position = data.INIT_POSITION || INIT_POSITION;
-    
+
+        // Check if sprite data is provided
+        if (data && data.src) {
+            
             // Load the sprite sheet
             this.spriteSheet = new Image();
             this.spriteSheet.src = data.src;
@@ -87,7 +87,7 @@ class Character extends GameObject {
             this.direction = 'down'; // Initial direction
             this.spriteData = data;
         } else {
-            throw new Error('Sprite data is required');
+            //throw new Error('Sprite data is required');
         }
 
         // Initialize the object's position and velocity

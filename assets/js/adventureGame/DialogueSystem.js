@@ -20,9 +20,9 @@ class DialogueSystem {
     this.closeBtn = null;
     
     // Sound effect option
-    this.enableSound = options.enableSound !== undefined ? options.enableSound : false;
-    this.soundUrl = options.soundUrl || "./sounds/dialogue.mp3";
-    this.sound = this.enableSound ? new Audio(this.soundUrl) : null;
+    // this.enableSound = options.enableSound !== undefined ? options.enableSound : false;
+    // this.soundUrl = options.soundUrl || "./sounds/dialogue.mp3";
+    // this.sound = this.enableSound ? new Audio(this.soundUrl) : null;
     
     // Create the dialogue box
     this.createDialogueBox();

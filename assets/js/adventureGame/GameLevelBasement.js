@@ -247,7 +247,6 @@ class GameLevelBasement {
         }
     };
 
-
       // NPC data for Miku
       const sprite_src_miku = path + "/images/gamify/miku.png"; // be sure to include the path
       const sprite_greet_miku = "OMG HI UWU MY NAME IS MIKU I'M SO SUPER DUPER STOKED TO MEET YOU!";
@@ -289,6 +288,19 @@ class GameLevelBasement {
             }
         }
     };
+    sprite_data_miku.dialogueSystem = new DialogueSystem({
+  id: 'miku_npc',
+  dialogues: sprite_data_miku.dialogues,
+  enableSound: true,
+  // soundUrl: './sounds/miku-dialogue.mp3' // customize if desired
+});
+sprite_data_miku.showReactionDialogue = function() {
+  this.dialogueSystem.showDialogue(this.greeting, "Miku", this.src);
+};
+
+sprite_data_miku.showRandomDialogue = function() {
+  this.dialogueSystem.showRandomDialogue("Miku", this.src);
+};
 
 const sprite_src_nezuko = path + "/images/gamify/nezuko.png"; // be sure to include the path
 const sprite_greet_nezuko = "IM CRASHING OUTTTTTT OF THIS GAME!!";
