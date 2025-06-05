@@ -1,3 +1,6 @@
+//palt 
+class Platformer {}
+
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -60,7 +63,6 @@ const platforms = [
 
 // Key tracking
 const keys = {};
-
 document.addEventListener("keydown", e => keys[e.code] = true);
 document.addEventListener("keyup", e => keys[e.code] = false);
 
@@ -146,3 +148,27 @@ function draw() {
 
 // Start the game
 update();
+
+// === ✅ Return to main game button ===
+const returnButton = document.createElement('button');
+returnButton.textContent = "Return to Main Game";
+Object.assign(returnButton.style, {
+  position: 'absolute',
+  top: '20px',
+  right: '20px',
+  padding: '10px 15px',
+  backgroundColor: '#111',
+  color: '#fff',
+  border: '2px solid white',
+  fontFamily: 'monospace',
+  fontSize: '14px',
+  cursor: 'pointer',
+  zIndex: '10000'
+});
+returnButton.onclick = () => {
+  window.location.href = './main.html'; // ← change this if your main game file is different
+};
+document.body.appendChild(returnButton);
+
+// Optional export (won't break your script if unused)
+export default Platformer;

@@ -306,7 +306,7 @@ const sprite_src_nezuko = path + "/images/gamify/nezuko.png"; // be sure to incl
 const sprite_greet_nezuko = "IM CRASHING OUTTTTTT OF THIS GAME!!";
 const sprite_data_nezuko = {
   id: 'Nezuko',
-  greeting:  sprite_greet_nezuko,
+  greeting: sprite_greet_nezuko,
   src: sprite_src_nezuko,
   SCALE_FACTOR: 5,
   ANIMATION_RATE: 50,
@@ -315,88 +315,139 @@ const sprite_data_nezuko = {
   orientation: { rows: 4, columns: 3 },
   down: { row: 0, start: 0, columns: 3 },
   hitbox: { widthPercentage: 1, heightPercentage: 1 },
-reaction: function() {
-    alert(sprite_greet_nezuko);
-          },
-          interact: function() {
-              // KEEP ORIGINAL GAME-IN-GAME FUNCTIONALITY
-              // Set a primary game reference from the game environment
-              let primaryGame = gameEnv.gameControl;
-              let levelArray = [GameLevelMC];
-              let gameInGame = new GameControl(gameEnv.game, levelArray);
-              primaryGame.pause();
-          
-              // Create and style the fade overlay
-              const fadeOverlay = document.createElement('div');
-              Object.assign(fadeOverlay.style, {
-                  position: 'absolute',
-                  top: '0px',
-                  left: '0px',
-                  width: width + 'px',
-                  height: height + 'px',
-                  backgroundColor: '#0a0a1a',
-                  opacity: '0',
-                  transition: 'opacity 1s ease-in-out',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  flexDirection: 'column',
-                  fontFamily: "'Orbitron', sans-serif",
-                  color: 'white',
-                  fontSize: '18px',
-                  zIndex: '9999'
-              });
-          
-              const loadingText = document.createElement('div');
-              loadingText.textContent = 'Loading...';
-              fadeOverlay.appendChild(loadingText);
-          
-              const loadingBar = document.createElement('div');
-              loadingBar.style.marginTop = '10px';
-              loadingBar.style.fontFamily = 'monospace';
-              loadingBar.textContent = '';
-              fadeOverlay.appendChild(loadingBar);
-          
-              document.body.appendChild(fadeOverlay);
-          
-              // Fade in
-              requestAnimationFrame(() => {
-                  fadeOverlay.style.opacity = '1';
-              });
-          
-              // Simulate loading bar
-              const totalDuration = 1000; // 1 second
-              const interval = 100;
-              const totalSteps = totalDuration / interval;
-              let currentStep = 0;
-          
-              const loadingInterval = setInterval(() => {
-                  currentStep++;
-                  loadingBar.textContent += '|';
-                  if (currentStep >= totalSteps) {
-                      clearInterval(loadingInterval);
-                  }
-              }, interval);
-          
-              // After loading and fade-in, start the mini-game
-              setTimeout(() => {
-                  // Start the new game
-                  gameInGame.start();
-          
-                  // Setup return to main game after mini-game ends
-                  gameInGame.gameOver = function() {
-                      primaryGame.resume();
-                  };
-          
-                  // Fade out
-                  fadeOverlay.style.opacity = '0';
-                  setTimeout(() => {
-                      document.body.removeChild(fadeOverlay);
-                  }, 1000); // Wait for fade-out to finish
-          
-              }, totalDuration + 200); // Delay a bit after loading bar finishes
-          }
+
+  reaction: function () {
+    // Pause the primary game
+    let primaryGame = gameEnv.gameControl;
+    primaryGame.pause();
+
+    // Create and style the fade overlay
+    const fadeOverlay = document.createElement('div');
+    Object.assign(fadeOverlay.style, {
+      position: 'absolute',
+      top: '0px',
+      left: '0px',
+      width: width + 'px',
+      height: height + 'px',
+      backgroundColor: '#0a0a1a',
+      opacity: '0',
+      transition: 'opacity 1s ease-in-out',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column',
+      fontFamily: "'Orbitron', sans-serif",
+      color: 'white',
+      fontSize: '18px',
+      zIndex: '9999'
+    });
+
+    const loadingText = document.createElement('div');
+    loadingText.textContent = 'Loading...';
+    fadeOverlay.appendChild(loadingText);
+
+    const loadingBar = document.createElement('div');
+    loadingBar.style.marginTop = '10px';
+    loadingBar.style.fontFamily = 'monospace';
+    loadingBar.textContent = '';
+    fadeOverlay.appendChild(loadingBar);
+
+    document.body.appendChild(fadeOverlay);
+
+    // Fade in
+    requestAnimationFrame(() => {
+      fadeOverlay.style.opacity = '1';
+    });
+
+    // Simulate loading bar
+    const totalDuration = 1000; // 1 second
+    const interval = 100;
+    const totalSteps = totalDuration / interval;
+    let currentStep = 0;
+
+    const loadingInterval = setInterval(() => {
+      currentStep++;
+      loadingBar.textContent += '|';
+      if (currentStep >= totalSteps) {
+        clearInterval(loadingInterval);
+      }
+    }, interval);
+
+    // After loading and fade-in, redirect to new level
+    setTimeout(() => {
+      window.location.href = "GameLevelBasement.html"; // replace with actual level file path
+    }, totalDuration + 200); // small delay after loading
+  },
+
+  interact: function () {
+    // Keep original game-in-game functionality if you want this as backup
+    let primaryGame = gameEnv.gameControl;
+    let levelArray = [GameLevelMC];
+    let gameInGame = new GameControl(gameEnv.game, levelArray);
+    primaryGame.pause();
+
+    const fadeOverlay = document.createElement('div');
+    Object.assign(fadeOverlay.style, {
+      position: 'absolute',
+      top: '0px',
+      left: '0px',
+      width: width + 'px',
+      height: height + 'px',
+      backgroundColor: '#0a0a1a',
+      opacity: '0',
+      transition: 'opacity 1s ease-in-out',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column',
+      fontFamily: "'Orbitron', sans-serif",
+      color: 'white',
+      fontSize: '18px',
+      zIndex: '9999'
+    });
+
+    const loadingText = document.createElement('div');
+    loadingText.textContent = 'Loading...';
+    fadeOverlay.appendChild(loadingText);
+
+    const loadingBar = document.createElement('div');
+    loadingBar.style.marginTop = '10px';
+    loadingBar.style.fontFamily = 'monospace';
+    loadingBar.textContent = '';
+    fadeOverlay.appendChild(loadingBar);
+
+    document.body.appendChild(fadeOverlay);
+
+    requestAnimationFrame(() => {
+      fadeOverlay.style.opacity = '1';
+    });
+
+    const totalDuration = 1000;
+    const interval = 100;
+    const totalSteps = totalDuration / interval;
+    let currentStep = 0;
+
+    const loadingInterval = setInterval(() => {
+      currentStep++;
+      loadingBar.textContent += '|';
+      if (currentStep >= totalSteps) {
+        clearInterval(loadingInterval);
+      }
+    }, interval);
+
+    setTimeout(() => {
+      gameInGame.start();
+      gameInGame.gameOver = function () {
+        primaryGame.resume();
       };
+      fadeOverlay.style.opacity = '0';
+      setTimeout(() => {
+        document.body.removeChild(fadeOverlay);
+      }, 1000);
+    }, totalDuration + 200);
+  }
+};
+
 
     // Store all NPC sprite data in an array
     this.npcsData = [
