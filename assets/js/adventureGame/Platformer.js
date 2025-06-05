@@ -14,7 +14,7 @@ const sprite_src_player = "/Nico_2025/images/gamify/steve.png";
 const playerImage = new Image();
 playerImage.src = sprite_src_player;
 
-const PLAYER_SCALE_FACTOR = 5;
+const PLAYER_SCALE_FACTOR = 3;
 
 const sprite_data_player = {
   id: 'Player',
@@ -61,10 +61,60 @@ const platforms = [
   { x: 600, y: 150, width: 100, height: 10 }
 ];
 
+// Chicken sprite setup
+const sprite_src_chicken = "/Nico_2025/images/gamify/chicken.png";
+const chickenImage = new Image();
+chickenImage.src = sprite_src_chicken;
+
+const CHICKEN_SCALE_FACTOR = 8;
+const chickenSpriteData = {
+  id: 'Chicken',
+  src: sprite_src_chicken,
+  SCALE_FACTOR: CHICKEN_SCALE_FACTOR,
+  pixels: { width: 448, height: 452 },
+  speed: 3,
+  direction: { x: Math.random() < 0.5 ? -1 : 1 },
+  x: 300,
+  y: 300,
+  width: 448 / CHICKEN_SCALE_FACTOR,
+  height: 452 / CHICKEN_SCALE_FACTOR,
+  frameX: 0,
+  frameY: 0,
+  frameCounter: 0,
+  ANIMATION_RATE: 30
+};
+
 // Key tracking
 const keys = {};
 document.addEventListener("keydown", e => keys[e.code] = true);
 document.addEventListener("keyup", e => keys[e.code] = false);
+
+// Chicken random motion logic
+function updateChickenMotion() {
+  chickenSpriteData.x += chickenSpriteData.direction.x * chickenSpriteData.speed;
+
+  // Bounce off canvas edges
+  if (chickenSpriteData.x < 0) {
+    chickenSpriteData.x = 0;
+    chickenSpriteData.direction.x = 1;
+  }
+  if (chickenSpriteData.x > canvas.width - chickenSpriteData.width) {
+    chickenSpriteData.x = canvas.width - chickenSpriteData.width;
+    chickenSpriteData.direction.x = -1;
+  }
+
+  // Occasionally change direction
+  if (Math.random() < 0.03) {
+    chickenSpriteData.direction.x *= -1;
+  }
+
+  // Animate sprite (if you have multiple frames)
+  chickenSpriteData.frameCounter++;
+  if (chickenSpriteData.frameCounter >= chickenSpriteData.ANIMATION_RATE) {
+    chickenSpriteData.frameX = (chickenSpriteData.frameX + 1) % 1; // Set to number of frames if animated
+    chickenSpriteData.frameCounter = 0;
+  }
+}
 
 // Game loop
 function update() {
@@ -113,6 +163,8 @@ function update() {
   if (player.x < 0) player.x = 0;
   if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
 
+  updateChickenMotion();
+
   // Animate sprite
   player.frameCounter++;
   if (player.frameCounter >= sprite_data_player.ANIMATION_RATE) {
@@ -144,6 +196,25 @@ function draw() {
   // Draw platforms
   ctx.fillStyle = "green";
   platforms.forEach(p => ctx.fillRect(p.x, p.y, p.width, p.height));
+
+  // Draw chicken NPC
+  ctx.save();
+  if (chickenSpriteData.direction.x === 1) { // Flip when moving right
+    ctx.translate(chickenSpriteData.x + chickenSpriteData.width, chickenSpriteData.y);
+    ctx.scale(-1, 1);
+    ctx.drawImage(
+      chickenImage,
+      0, 0, chickenSpriteData.pixels.width, chickenSpriteData.pixels.height,
+      0, 0, chickenSpriteData.width, chickenSpriteData.height
+    );
+  } else {
+    ctx.drawImage(
+      chickenImage,
+      0, 0, chickenSpriteData.pixels.width, chickenSpriteData.pixels.height,
+      chickenSpriteData.x, chickenSpriteData.y, chickenSpriteData.width, chickenSpriteData.height
+    );
+  }
+  ctx.restore();
 }
 
 // Start the game

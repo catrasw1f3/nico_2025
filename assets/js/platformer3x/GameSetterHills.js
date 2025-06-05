@@ -138,7 +138,13 @@ const assets = {
   const GameSetHills = {
     tag: 'Hills',
     assets: assets,
-    objects: objects
+    objects: objects,
+    main(environment) {
+      // Your game initialization logic here
+      console.log("GameSetHills main called with environment:", environment);
+      // For example, you might want to initialize your game engine here
+      // GameEngine.init(this, environment);
+    }
   };
 
 export default GameSetHills;
