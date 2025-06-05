@@ -231,7 +231,7 @@ dialogues: [
                                       gameControl._originalLevelClasses = gameControl.levelClasses;
                                       
                                       // Set the new level class to Platformer
-                                      window.location.href = "/Nico_2025/Nico_2025/gamify/platformer"; // PLEASE WORK
+                                      window.location.href = "/Nico_2025/Nico_2025/gamify/platformerMC"; // PLEASE WORK
 
                                       
                                       // Make sure game is not paused
