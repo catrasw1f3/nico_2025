@@ -1,4 +1,4 @@
-//palt 
+// Platformer Game Example
 class Platformer {}
 
 const canvas = document.getElementById("gameCanvas");
@@ -30,7 +30,7 @@ const sprite_data_player = {
   left: { row: 1, start: 0, columns: 3 },
   right: { row: 2, start: 0, columns: 3 },
   up: { row: 3, start: 0, columns: 3 },
-  hitbox: { widthPercentage: 0.45, heightPercentage: 0.2 },
+  hitbox: { widthPercentage: 0.65, heightPercentage: 0.3 },
   keypress: { up: 87, left: 65, down: 83, right: 68 }
 };
 
@@ -166,9 +166,13 @@ Object.assign(returnButton.style, {
   zIndex: '10000'
 });
 returnButton.onclick = () => {
-  window.location.href = './main.html'; // ← change this if your main game file is different
+  window.location.href = '/Nico_2025/Nico_2025/gamify/adventureGame'; // ← change this if your main game file is different
 };
-document.body.appendChild(returnButton);
 
-// Optional export (won't break your script if unused)
-export default Platformer;
+
+
+document.body.appendChild(returnButton);
+// === ✅ End of game button ===
+
+
+// export default Platformer;

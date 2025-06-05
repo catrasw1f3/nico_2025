@@ -6,7 +6,7 @@ import Quiz from './Quiz.js';
 import GameControl from './GameControl.js';
 import Creeper from './Creeper.js'; // Import the Creeper class
 import GameLevelForest from './GameLevelForest.js';
-import Platfromer from './Platformer.js'
+// import Platfromer from './Platformer.js'
 import DialogueSystem from './DialogueSystem.js';
 
 class GameLevelMC {
@@ -230,9 +230,9 @@ dialogues: [
                                       // IMPORTANT: Store the original level classes for return journey
                                       gameControl._originalLevelClasses = gameControl.levelClasses;
                                       
-                                      // Change the level classes to GameLevelEnd
-                                      gameControl.levelClasses = [Platfromer];
-                                      gameControl.currentLevelIndex = 0;
+                                      // Set the new level class to Platformer
+                                      window.location.href = "/Nico_2025/Nico_2025/gamify/platformer"; // PLEASE WORK
+
                                       
                                       // Make sure game is not paused
                                       gameControl.isPaused = false;
