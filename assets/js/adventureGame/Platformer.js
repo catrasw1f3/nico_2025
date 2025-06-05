@@ -50,7 +50,9 @@ const player = {
   onGround: false,
   frameX: 0,
   frameY: sprite_data_player.down.row,
-  frameCounter: 0
+  frameCounter: 0,
+  flashRed: false,
+  flashTimer: 0
 };
 
 // Platform data
@@ -171,6 +173,19 @@ function updateBeeMotion() {
   beeSpriteData.y = 100 + Math.sin(beeBuzzAngle) * 20; // 200 is base Y, 20 is amplitude
 }
 
+// Check player-bee collision
+function checkPlayerBeeCollision() {
+  if (
+    player.x < beeSpriteData.x + beeSpriteData.width &&
+    player.x + player.width > beeSpriteData.x &&
+    player.y < beeSpriteData.y + beeSpriteData.height &&
+    player.y + player.height > beeSpriteData.y
+  ) {
+    player.flashRed = true;
+    player.flashTimer = 15; // frames to flash
+  }
+}
+
 // Game loop
 function update() {
   // Movement input
@@ -221,6 +236,16 @@ function update() {
   updateChickenMotion();
   updateBeeMotion();
 
+  checkPlayerBeeCollision();
+
+  // Handle flash timer
+  if (player.flashRed) {
+    player.flashTimer--;
+    if (player.flashTimer <= 0) {
+      player.flashRed = false;
+    }
+  }
+
   // Animate sprite
   player.frameCounter++;
   if (player.frameCounter >= sprite_data_player.ANIMATION_RATE) {
@@ -236,18 +261,35 @@ function update() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // Draw player sprite
-  ctx.drawImage(
-    playerImage,
-    player.frameX * frameWidth,
-    player.frameY * frameHeight,
-    frameWidth,
-    frameHeight,
-    player.x,
-    player.y,
-    player.width,
-    player.height
-  );
+  // Draw player sprite with red flash effect
+  if (player.flashRed) {
+    ctx.save();
+    ctx.filter = "saturate(0) hue-rotate(-50deg) brightness(1.2)"; //ACTUALLY FLASHES WHITE. NOT RED. 
+    ctx.drawImage(
+      playerImage,
+      player.frameX * frameWidth,
+      player.frameY * frameHeight,
+      frameWidth,
+      frameHeight,
+      player.x,
+      player.y,
+      player.width,
+      player.height
+    );
+    ctx.restore();
+  } else {
+    ctx.drawImage(
+      playerImage,
+      player.frameX * frameWidth,
+      player.frameY * frameHeight,
+      frameWidth,
+      frameHeight,
+      player.x,
+      player.y,
+      player.width,
+      player.height
+    );
+  }
 
   // Draw platforms
   ctx.fillStyle = "green";
