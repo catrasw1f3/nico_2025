@@ -1,6 +1,6 @@
-import Character from './Character.js';
-import GameEnv from './GameEnv.js';
-import GameControl from './GameControl.js';
+import Character from '../adventureGame/Character.js';
+import GameEnv from '../adventureGame/GameEnv.js';
+import GameControl from '../adventureGame/GameControl.js';
 
 export class Chicken extends Character {
     // constructors sets up Character object 
