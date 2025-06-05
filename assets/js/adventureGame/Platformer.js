@@ -183,6 +183,15 @@ function checkPlayerBeeCollision() {
   ) {
     player.flashRed = true;
     player.flashTimer = 15; // frames to flash
+
+    // Knockback effect
+    if (player.x < beeSpriteData.x) {
+      player.velocityX = -8; // Move left if player is left of bee
+    } else {
+      player.velocityX = 8;  // Move right if player is right of bee
+    }
+    player.velocityY = -8;   // Jump up a bit
+    player.onGround = false; // Ensure player is airborne
   }
 }
 
