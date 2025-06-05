@@ -1,5 +1,5 @@
 import GameEnv from './GameEnv.js';
-import Socket from './Multiplayer.js';
+//import Socket from './Multiplayer.js';
 
 class GameObject {
     // container for all game objects in game
@@ -34,14 +34,14 @@ class GameObject {
 
     // log Character element change
     logElement() {
-        var jsonifiedElement = this.stringifyElement();
+        /** var jsonifiedElement = this.stringifyElement();
         if (jsonifiedElement !== this.jsonifiedElement) {
             //console.log(jsonifiedElement);
             this.jsonifiedElement = jsonifiedElement;
             if (this.shouldBeSynced && !GameEnv.inTransition) {
                 Socket.sendData("update",this.jsonifiedElement);
             }
-        }
+        } */
     }
 
     // strigify Character key data
