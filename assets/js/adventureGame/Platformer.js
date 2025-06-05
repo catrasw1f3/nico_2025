@@ -84,6 +84,29 @@ const chickenSpriteData = {
   ANIMATION_RATE: 30
 };
 
+// Bee sprite setup
+const sprite_src_bee = "/Nico_2025/images/gamify/bee.png"; // Use your bee image path
+const beeImage = new Image();
+beeImage.src = sprite_src_bee;
+
+const BEE_SCALE_FACTOR = 8;
+const beeSpriteData = {
+  id: 'Bee',
+  src: sprite_src_bee,
+  SCALE_FACTOR: BEE_SCALE_FACTOR,
+  pixels: { width: 512, height: 512 },
+  speed: 2,
+  direction: { x: Math.random() < 0.5 ? -1 : 1 },
+  x: 100,
+  y: 100,
+  width: 512 / BEE_SCALE_FACTOR,
+  height: 512 / BEE_SCALE_FACTOR,
+  frameX: 0,
+  frameY: 0,
+  frameCounter: 0,
+  ANIMATION_RATE: 30
+};
+
 // Key tracking
 const keys = {};
 document.addEventListener("keydown", e => keys[e.code] = true);
@@ -114,6 +137,38 @@ function updateChickenMotion() {
     chickenSpriteData.frameX = (chickenSpriteData.frameX + 1) % 1; // Set to number of frames if animated
     chickenSpriteData.frameCounter = 0;
   }
+}
+
+// Bee random motion logic
+let beeBuzzAngle = 0;
+
+function updateBeeMotion() {
+  beeSpriteData.x += beeSpriteData.direction.x * beeSpriteData.speed;
+
+  // Bounce off canvas edges
+  if (beeSpriteData.x < 0) {
+    beeSpriteData.x = 0;
+    beeSpriteData.direction.x = 1;
+  }
+  if (beeSpriteData.x > canvas.width - beeSpriteData.width) {
+    beeSpriteData.x = canvas.width - beeSpriteData.width;
+    beeSpriteData.direction.x = -1;
+  }
+
+  // Occasionally change direction
+  if (Math.random() < 0.03) {
+    beeSpriteData.direction.x *= -1;
+  }
+
+  // Animate sprite (if you have multiple frames)
+  beeSpriteData.frameCounter++;
+  if (beeSpriteData.frameCounter >= beeSpriteData.ANIMATION_RATE) {
+    beeSpriteData.frameX = (beeSpriteData.frameX + 1) % 1; // Set to number of frames if animated
+    beeSpriteData.frameCounter = 0;
+  }
+
+  beeBuzzAngle += 0.1;
+  beeSpriteData.y = 100 + Math.sin(beeBuzzAngle) * 20; // 200 is base Y, 20 is amplitude
 }
 
 // Game loop
@@ -164,6 +219,7 @@ function update() {
   if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
 
   updateChickenMotion();
+  updateBeeMotion();
 
   // Animate sprite
   player.frameCounter++;
@@ -212,6 +268,25 @@ function draw() {
       chickenImage,
       0, 0, chickenSpriteData.pixels.width, chickenSpriteData.pixels.height,
       chickenSpriteData.x, chickenSpriteData.y, chickenSpriteData.width, chickenSpriteData.height
+    );
+  }
+  ctx.restore();
+
+  // Draw bee NPC
+  ctx.save();
+  if (beeSpriteData.direction.x === 1) { // Flip when moving right
+    ctx.translate(beeSpriteData.x + beeSpriteData.width, beeSpriteData.y);
+    ctx.scale(-1, 1);
+    ctx.drawImage(
+      beeImage,
+      0, 0, beeSpriteData.pixels.width, beeSpriteData.pixels.height,
+      0, 0, beeSpriteData.width, beeSpriteData.height
+    );
+  } else {
+    ctx.drawImage(
+      beeImage,
+      0, 0, beeSpriteData.pixels.width, beeSpriteData.pixels.height,
+      beeSpriteData.x, beeSpriteData.y, beeSpriteData.width, beeSpriteData.height
     );
   }
   ctx.restore();
