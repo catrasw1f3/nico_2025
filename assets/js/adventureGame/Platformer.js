@@ -10,7 +10,7 @@ const friction = 0.8;
 
 // Load sprite image
 const path = "."; // Adjust path if needed
-const sprite_src_player = "/Nico_2025/images/gamify/steve.png";
+const sprite_src_player = "/Nico_2025/images/gamify/alex.png";
 const playerImage = new Image();
 playerImage.src = sprite_src_player;
 
@@ -18,7 +18,7 @@ const PLAYER_SCALE_FACTOR = 3;
 
 const sprite_data_player = {
   id: 'Player',
-  greeting: "I am Steve.",
+  greeting: "I am Alex.",
   src: sprite_src_player,
   SCALE_FACTOR: PLAYER_SCALE_FACTOR,
   STEP_FACTOR: 800,
